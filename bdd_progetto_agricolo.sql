@@ -138,6 +138,12 @@ CREATE TABLE Notifica (
   Attivita_programmate VARCHAR(200) NOT NULL,
   Errori               VARCHAR(200) NOT NULL,
   Anomalie             VARCHAR(200) NOT NULL,
+  Data_evento          DATE         NOT NULL,-- !!!forse qua serve un vincolo che la data dell evento non puo essere minore della data attuale !!!!!!
+  Utenti_tag           TEXT         NOT NULL,
+  Tutti_colt           BOOLEAN      NOT NULL DEFAULT FALSE,
+  Titolo               VARCHAR(200) NOT NULL,
+  Descrizione       TEXT NOT NULL,
+	
   CONSTRAINT chk_enti_lista
     CHECK (
       NULLIF(trim(Attivita_programmate), '') IS NOT NULL
