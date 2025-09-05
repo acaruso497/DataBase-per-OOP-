@@ -36,6 +36,7 @@ CREATE TABLE Coltivatore (
 CREATE TABLE Progetto_Coltivazione (
   ID_Progetto     INT      PRIMARY KEY,
   titolo       VARCHAR(100) NOT NULL,
+  descrizione VARCHAR(200) NOT NULL,
   stima_raccolto   NUMERIC,
   data_inizio      DATE     NOT NULL,
   data_fine        DATE     NOT NULL,
@@ -447,10 +448,10 @@ VALUES
   ('CRSNTN99C20L378W', 'Antonio',  'Caruso',   'antcar','Anto' );
 
 -- Popolamento Progetto_Coltivazione 
-INSERT INTO Progetto_Coltivazione (titolo, stima_raccolto, data_inizio, data_fine)
+INSERT INTO Progetto_Coltivazione (titolo, descrizione, stima_raccolto, data_inizio, data_fine)
 VALUES 
-  ('Coltivazione zucchine', 1200, '2025-04-01', '2025-07-01'),
-  ('Coltivazione pomodoro', 800,  '2025-05-01', '2025-08-01');
+  ('Coltivazione zucchine', 'Progetto dedicato alla coltivazione delle zucchine chiare', 1200, '2025-04-01', '2025-07-01'),
+  ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01');
 
 -- Popolamento Lotto
 INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr) 
