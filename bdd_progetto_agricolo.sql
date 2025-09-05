@@ -35,6 +35,7 @@ CREATE TABLE Coltivatore (
 
 CREATE TABLE Progetto_Coltivazione (
   ID_Progetto     INT      PRIMARY KEY,
+  titolo       VARCHAR(100) NOT NULL,
   stima_raccolto   NUMERIC,
   data_inizio      DATE     NOT NULL,
   data_fine        DATE     NOT NULL,
@@ -446,10 +447,10 @@ VALUES
   ('CRSNTN99C20L378W', 'Antonio',  'Caruso',   'antcar','Anto' );
 
 -- Popolamento Progetto_Coltivazione 
-INSERT INTO Progetto_Coltivazione (stima_raccolto, data_inizio, data_fine)
+INSERT INTO Progetto_Coltivazione (titolo, stima_raccolto, data_inizio, data_fine)
 VALUES 
-  (1200, '2025-04-01', '2025-07-01'),
-  (800,  '2025-05-01', '2025-08-01');
+  ('Coltivazione zucchine', 1200, '2025-04-01', '2025-07-01'),
+  ('Coltivazione pomodoro', 800,  '2025-05-01', '2025-08-01');
 
 -- Popolamento Lotto
 INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr) 
@@ -492,10 +493,12 @@ VALUES
   ('2023-08-12', '2023-08-18', 320.00, 3);
 
 -- Popolamento Notifica
-INSERT INTO Notifica (Attivita_programmate, Errori, Anomalie, ID_Attivita)
+INSERT INTO Notifica
+(Attivita_programmate, Errori, Anomalie, Data_evento, Utenti_tag, Tutti_colt, Titolo, Descrizione, ID_Attivita)
 VALUES
-  ('Controllare piante', '', '', 1),
-  ('Controllare terreno', '', '', 2);
+  ('Controllare piante',   '', '', CURRENT_DATE, 'nicagr,arfior', FALSE, 'Verifica piante',  'Controllare lo stato delle piante', 1),
+  ('Controllare terreno',  '', '', CURRENT_DATE, 'antcar',         FALSE, 'Verifica terreno','Controllare lo stato del terreno',  2);
+
 
 ---------------------POPOLAMENTO TABELLE BASE------------------------------
 
