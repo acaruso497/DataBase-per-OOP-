@@ -78,7 +78,15 @@ CREATE TABLE Attivita (
  CHECK (giorno_assegnazione = CURRENT_DATE),
   Codice_FiscaleCol VARCHAR(16),
   ID_Lotto         INT NOT NULL,
-
+  stato            VARCHAR(50) NOT NULL DEFAULT 'pianificata',
+  CONSTRAINT check_stato 
+  	CHECK (
+  	  stato IN (
+	  	'pianificata', 
+  	  	'in corso', 
+  	  	'completata'
+  	)
+  ),
   FOREIGN KEY (Codice_FiscaleCol)
     REFERENCES Coltivatore(Codice_Fiscale),
   FOREIGN KEY (ID_Lotto)
@@ -466,11 +474,11 @@ VALUES
   ('Zucchina Chiara',      'Ortaggio', 60, 4, '2025-04-20');
 
 -- Popolamento Attività
-INSERT INTO Attivita (Codice_FiscaleCol, ID_Lotto) 
+INSERT INTO Attivita (Codice_FiscaleCol, ID_Lotto, stato) 
 VALUES
-  ('GRCNCL92P10F839Z', 1),
-  ('FRLRMN90A01L736X', 2),
-  ('CRSNTN99C20L378W', 1);
+  ('GRCNCL92P10F839Z', 1, 'pianificata'),
+  ('FRLRMN90A01L736X', 2, 'pianificata'),
+  ('CRSNTN99C20L378W', 1, 'pianificata');
   
 -- Popolamento Semina
 INSERT INTO Semina (giorno_inizio, giorno_fine, profondita, tipo_semina, ID_Attivita) 
@@ -550,3 +558,22 @@ VALUES
   (2, 2);
   
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
+---------------------VIEW---------------------------------------------------
+
+CREATE OR REPLACE VIEW view_raccolto AS
+SELECT
+    ra.raccolto_effettivo,
+    Prog_c.stima_raccolto,
+	Prog_c.data_inizio,
+	Prog_c.data_fine,
+    ospitaLP.*,
+    prop.Codice_Fiscale
+FROM
+    Lotto AS L
+    NATURAL JOIN Ospita_Lotto_Progetto AS ospitaLP
+    NATURAL JOIN Progetto_Coltivazione AS Prog_c
+    NATURAL JOIN Raccolta AS ra
+    NATURAL JOIN Proprietario AS prop;
+
+---------------------VIEW---------------------------------------------------
+
