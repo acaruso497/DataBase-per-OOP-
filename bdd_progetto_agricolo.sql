@@ -173,8 +173,6 @@ CREATE TABLE Raccolta (
 CREATE TABLE Notifica (
   ID_Notifica          INT PRIMARY KEY,
   Attivita_programmate VARCHAR(200) NOT NULL,
-  Errori               VARCHAR(200) NOT NULL,
-  Anomalie             VARCHAR(200) NOT NULL,
   Data_evento          DATE         NOT NULL,-- !!!forse qua serve un vincolo che la data dell evento non puo essere minore della data attuale !!!!!!
   Utenti_tag           TEXT         NOT NULL,
   Tutti_colt           BOOLEAN      NOT NULL DEFAULT FALSE,
@@ -184,8 +182,7 @@ CREATE TABLE Notifica (
   CONSTRAINT chk_enti_lista
     CHECK (
       NULLIF(trim(Attivita_programmate), '') IS NOT NULL
-      OR NULLIF(trim(Errori), '') IS NOT NULL
-      OR NULLIF(trim(Anomalie), '') IS NOT NULL
+      
     ),
   ID_Attivita          INT NOT NULL,
   FOREIGN KEY (ID_Attivita) REFERENCES Attivita(ID_Attivita)
