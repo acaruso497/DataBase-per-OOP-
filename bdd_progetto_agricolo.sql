@@ -97,6 +97,15 @@ CREATE TABLE Semina (
   ID_Semina    INT       PRIMARY KEY,
   giorno_inizio   DATE    NOT NULL,
   giorno_fine     DATE    NOT NULL,
+	stato            VARCHAR(50) NOT NULL DEFAULT 'pianificata',
+  CONSTRAINT check_stato 
+  	CHECK (
+  	  stato IN (
+	  	'pianificata', 
+  	  	'in corso', 
+  	  	'completata'
+  	)
+  ),
  CONSTRAINT chk_coerenza_date
     CHECK (giorno_inizio <= giorno_fine),
   
@@ -112,6 +121,15 @@ CREATE TABLE Irrigazione (
   ID_Irrigazione   INT        PRIMARY KEY,
   giorno_inizio   DATE    NOT NULL,
   giorno_fine     DATE    NOT NULL,
+  stato            VARCHAR(50) NOT NULL DEFAULT 'pianificata',
+  CONSTRAINT check_stato 
+  	CHECK (
+  	  stato IN (
+	  	'pianificata', 
+  	  	'in corso', 
+  	  	'completata'
+  	)
+  ),	
  CONSTRAINT chk_coerenza_date
     CHECK (giorno_inizio <= giorno_fine),
   
@@ -133,6 +151,15 @@ CREATE TABLE Raccolta (
   ID_Raccolta    INT    PRIMARY KEY,
   giorno_inizio   DATE    NOT NULL,
   giorno_fine     DATE    NOT NULL,
+  stato            VARCHAR(50) NOT NULL DEFAULT 'pianificata',
+  CONSTRAINT check_stato 
+  	CHECK (
+  	  stato IN (
+	  	'pianificata', 
+  	  	'in corso', 
+  	  	'completata'
+  	)
+  ),
    CONSTRAINT chk_coerenza_date
     CHECK (giorno_inizio <= giorno_fine),
   raccolto_effettivo NUMERIC   NOT NULL
