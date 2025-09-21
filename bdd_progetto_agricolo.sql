@@ -178,13 +178,8 @@ CREATE TABLE Notifica (
   Tutti_colt           BOOLEAN      NOT NULL DEFAULT FALSE,
   Titolo               VARCHAR(200) NOT NULL,
   Descrizione       TEXT NOT NULL,
-	
-  CONSTRAINT chk_enti_lista
-    CHECK (
-      NULLIF(trim(Attivita_programmate), '') IS NOT NULL
-      
-    ),
-  ID_Attivita          INT NOT NULL,
+  Lettura           BOOLEAN NOT NULL DEFAULT FALSE,
+  ID_Attivita          INT,
   FOREIGN KEY (ID_Attivita) REFERENCES Attivita(ID_Attivita)
 );
 ---------------TABELLE BASE------------------
@@ -527,10 +522,10 @@ VALUES
 
 -- Popolamento Notifica
 INSERT INTO Notifica
-(Attivita_programmate, Errori, Anomalie, Data_evento, Utenti_tag, Tutti_colt, Titolo, Descrizione, ID_Attivita)
+(Attivita_programmate, Data_evento, Utenti_tag, Tutti_colt, Titolo, Descrizione, Lettura, ID_Attivita)
 VALUES
-  ('Controllare piante',   '', '', CURRENT_DATE, 'nicagr,arfior', FALSE, 'Verifica piante',  'Controllare lo stato delle piante', 1),
-  ('Controllare terreno',  '', '', CURRENT_DATE, 'antcar',         FALSE, 'Verifica terreno','Controllare lo stato del terreno',  2);
+  ('Controllare piante', CURRENT_DATE, 'nicagr,arfior', FALSE, 'Verifica piante',  'Controllare lo stato delle piante', FALSE, 1),
+  ('Controllare terreno', CURRENT_DATE, 'antcar',         FALSE, 'Verifica terreno','Controllare lo stato del terreno', FALSE, 2);
 
 
 ---------------------POPOLAMENTO TABELLE BASE------------------------------
