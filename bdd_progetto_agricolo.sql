@@ -594,5 +594,84 @@ FROM
     NATURAL JOIN Raccolta AS ra
     NATURAL JOIN Proprietario AS prop;
 
+--_______________________view coltivatore______________________________
+CREATE OR REPLACE VIEW coltivatoreView AS
+
+SELECT
+    -- Informazioni Coltivatore
+    c.username AS username_coltivatore,
+    c.nome AS nome_coltivatore,
+    c.cognome AS cognome_coltivatore,
+    c.esperienza,
+    -- Informazioni Proprietario
+    p.username AS username_proprietario,
+    p.nome AS nome_proprietario,
+    p.cognome AS cognome_proprietario,
+    
+    -- Informazioni Lotto
+    l.ID_Lotto,
+    l.posizione,
+    
+    -- Informazioni Progetto Coltivazione
+    pc.titolo AS titolo_progetto,
+    pc.ID_Progetto,
+    pc.data_inizio AS data_inizio_progetto,
+    pc.data_fine AS data_fine_progetto,
+    
+    -- Informazioni Attività
+    att.ID_Attivita,
+    att.giorno_Assegnazione,
+   
+    
+    -- Informazioni Semina (se presente)
+    s.ID_Semina,
+    s.profondita,
+    s.tipo_semina,
+    s.giorno_inizio AS data_inizio_semina,
+    s.giorno_fine  AS data_fine_semina,
+    
+    -- Informazioni Irrigazione (se presente)
+    i.ID_Irrigazione,
+    i.tipo_irrigazione,
+    i.giorno_inizio AS data_inizio_irrigazione,
+    i.giorno_fine  AS data_fine_irrigazione,
+    
+    -- Informazioni Raccolta (se presente)
+    r.ID_Raccolta,
+	r.raccolto_effettivo,
+    r.giorno_inizio AS data_inizio_raccolta,
+    r.giorno_fine  AS data_fine_raccolta
+    
+   
+
+FROM Coltivatore AS c
+    -- Join con Attività (ogni coltivatore ha almeno un'attività)
+    INNER JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+    
+    -- Join con Lotto (ogni attività è su un lotto)
+    INNER JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+    
+    -- Join con Proprietario (ogni lotto ha un proprietario)
+    INNER JOIN Proprietario p ON l.Codice_FiscalePr = p.Codice_Fiscale
+    
+    -- Join con Progetto Coltivazione (opzionale, tramite tabella ponte)
+    LEFT JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.ID_Lotto
+    LEFT JOIN Progetto_Coltivazione pc ON osp.ID_Progetto = pc.ID_Progetto
+    
+    -- Left join con attività specifiche (opzionali)
+    LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+    LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+    LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+    
+
+   
+
+ORDER BY 
+    c.cognome,
+    c.nome,
+    l.ID_Lotto,
+    pc.ID_Progetto,
+    att.giorno_Assegnazione;
+
 ---------------------VIEW---------------------------------------------------
 
