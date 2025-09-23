@@ -578,7 +578,7 @@ VALUES
   
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
 ---------------------VIEW---------------------------------------------------
-
+--_______________________view raccolto______________________________
 CREATE OR REPLACE VIEW view_raccolto AS
 SELECT
     ra.raccolto_effettivo,
@@ -673,5 +673,13 @@ ORDER BY
     pc.ID_Progetto,
     att.giorno_Assegnazione;
 
----------------------VIEW---------------------------------------------------
+--_______________________view coltura______________________________
+CREATE OR REPLACE VIEW view_coltura AS
+SELECT c.tipo, 
+c.varietà,
+con.id_lotto
 
+FROM Coltura AS c 
+NATURAL JOIN Contiene AS con
+
+---------------------VIEW---------------------------------------------------
