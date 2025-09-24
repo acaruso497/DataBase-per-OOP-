@@ -595,8 +595,7 @@ FROM
     NATURAL JOIN Proprietario AS prop;
 
 --_______________________view coltivatore______________________________
-CREATE OR REPLACE VIEW coltivatoreView AS
-
+CREATE OR REPLACE VIEW coltivatoreview AS 
 SELECT
     -- Informazioni Coltivatore
     c.username AS username_coltivatore,
@@ -640,39 +639,30 @@ SELECT
     r.ID_Raccolta,
 	r.raccolto_effettivo,
     r.giorno_inizio AS data_inizio_raccolta,
-    r.giorno_fine  AS data_fine_raccolta
+    r.giorno_fine  AS data_fine_raccolta,
     
-   
-
+    -- INFORMAZIONI COLTURA
+    col.tipo AS tipo_coltura,
+    col.varietà AS varieta_coltura
+    
 FROM Coltivatore AS c
-    -- Join con Attività (ogni coltivatore ha almeno un'attività)
     INNER JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
-    
-    -- Join con Lotto (ogni attività è su un lotto)
     INNER JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-    
-    -- Join con Proprietario (ogni lotto ha un proprietario)
     INNER JOIN Proprietario p ON l.Codice_FiscalePr = p.Codice_Fiscale
-    
-    -- Join con Progetto Coltivazione (opzionale, tramite tabella ponte)
     LEFT JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.ID_Lotto
     LEFT JOIN Progetto_Coltivazione pc ON osp.ID_Progetto = pc.ID_Progetto
-    
-    -- Left join con attività specifiche (opzionali)
     LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
     LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
     LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
-    
-
    
-
+    LEFT JOIN Contiene cont ON l.ID_Lotto = cont.ID_Lotto
+    LEFT JOIN Coltura col ON cont.ID_Coltura = col.ID_Coltura
 ORDER BY 
     c.cognome,
-    c.nome,
-    l.ID_Lotto,
+    c.nome,  
+    l.ID_Lotto,  
     pc.ID_Progetto,
     att.giorno_Assegnazione;
-
 --_______________________view coltura______________________________
 CREATE OR REPLACE VIEW view_coltura AS
 SELECT c.tipo, 
