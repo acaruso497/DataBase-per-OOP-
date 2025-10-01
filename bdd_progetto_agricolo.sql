@@ -554,6 +554,15 @@ CREATE TABLE Ospita_Lotto_Progetto (
   FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto),
   FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto)
 );
+
+CREATE TABLE Progetto_Coltura (
+  ID_Progetto INT,
+  ID_Coltura  INT,
+  PRIMARY KEY (ID_Progetto, ID_Coltura),
+  FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto),
+  FOREIGN KEY (ID_Coltura) REFERENCES Coltura(ID_Coltura)
+);
+
 ----------------------TABELLE PONTE-----------------------------------
 
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
