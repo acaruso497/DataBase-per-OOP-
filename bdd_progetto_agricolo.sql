@@ -48,9 +48,9 @@ CREATE TABLE Coltura (
   ID_Coltura            INT PRIMARY KEY,
   varietà               VARCHAR(50),
   tipo                  VARCHAR(50),
-  tempi_maturazione     INT,
-  frequenza_irrigazione INT,
-  periodo_semina        DATE NOT NULL,
+  raccoltoProdotto    	INT,
+
+  
   CONSTRAINT chk_mese_semina
     CHECK (
       EXTRACT(MONTH FROM periodo_semina) BETWEEN 2 AND 7
