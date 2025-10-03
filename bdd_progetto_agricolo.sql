@@ -688,7 +688,7 @@ ORDER BY pc.id_progetto, col.varietà;
 
 --_______________________view ComboProgettiColtivatore______________________________
 CREATE OR REPLACE VIEW ComboProgettiColtivatore AS
-SELECT DISTINCT 
+SELECT  
     c.username AS username_coltivatore,
     pc.titolo AS titolo_progetto
 FROM Coltivatore c
@@ -698,3 +698,58 @@ JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
 JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
 ORDER BY pc.titolo;
 --_______________________view ComboProgettiColtivatore______________________________
+
+--_______________________view date_progetti_coltivatore______________________________
+CREATE OR REPLACE VIEW date_progetti_coltivatore AS
+SELECT  
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    pc.data_inizio AS data_inizio_progetto,
+    pc.data_fine AS data_fine_progetto
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+ORDER BY pc.titolo;
+--_______________________view date_progetti_coltivatore______________________________
+
+--_______________________view DateAttivitaColtivatore______________________________
+CREATE OR REPLACE VIEW DateAttivitaColtivatore AS
+SELECT  
+    att.ID_Attivita,
+    s.giorno_inizio AS data_inizio_semina,
+    s.giorno_fine AS data_fine_semina,
+    i.giorno_inizio AS data_inizio_irrigazione,
+    i.giorno_fine AS data_fine_irrigazione,
+    r.giorno_inizio AS data_inizio_raccolta,
+    r.giorno_fine AS data_fine_raccolta
+FROM Attivita att
+LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+ORDER BY att.ID_Attivita;
+--_______________________view DateAttivitaColtivatore______________________________
+
+--_______________________view AttivitaColtivatore______________________________
+CREATE OR REPLACE VIEW AttivitaColtivatore AS
+SELECT 
+    att.ID_Attivita,
+    pc.titolo AS titolo_progetto,
+    c.username AS username_coltivatore,
+    s.ID_Semina,
+    i.ID_Irrigazione,
+    r.ID_Raccolta,
+    att.giorno_Assegnazione AS data_inizio_attivita
+FROM Attivita att
+JOIN Coltivatore c ON att.Codice_FiscaleCol = c.Codice_Fiscale
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+ORDER BY att.giorno_Assegnazione;
+--_______________________view AttivitaColtivatore______________________________
+
+
