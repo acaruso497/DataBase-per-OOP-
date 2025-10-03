@@ -675,6 +675,7 @@ ORDER BY
 
 
 ---------------------VIEW---------------------------------------------------
+--_______________________view ComboListaColture______________________________
 CREATE OR REPLACE VIEW ComboListaColture
 	SELECT 
     pc.id_progetto,
@@ -683,3 +684,17 @@ FROM Progetto_Coltivazione pc
 JOIN Progetto_Coltura pcol ON pc.id_progetto = pcol.id_progetto
 JOIN Coltura col ON pcol.id_coltura = col.id_coltura
 ORDER BY pc.id_progetto, col.varietà;
+--_______________________view ComboListaColture______________________________
+
+--_______________________view ComboProgettiColtivatore______________________________
+CREATE OR REPLACE VIEW ComboProgettiColtivatore AS
+SELECT DISTINCT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+ORDER BY pc.titolo;
+--_______________________view ComboProgettiColtivatore______________________________
