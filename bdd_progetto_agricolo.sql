@@ -573,12 +573,6 @@ VALUES
   (1, 'SGNMRA88A41F205X'),
   (2, 'DMNSRG85T12C351Y');
 
--- Associazione Lotto → Coltura
-INSERT INTO Contiene (ID_Lotto, ID_Coltura) 
-VALUES
-  (1, 1),
-  (2, 2);
-
 -- Associazione Lotto → Progetto_Coltivazione
 INSERT INTO Ospita_Lotto_Progetto (ID_Lotto, ID_Progetto)
 VALUES
