@@ -578,7 +578,11 @@ INSERT INTO Ospita_Lotto_Progetto (ID_Lotto, ID_Progetto)
 VALUES
   (1, 1),
   (2, 2);
-  
+
+INSERT INTO Progetto_Coltura (ID_Coltura, ID_Progetto)
+VALUES
+  (1, 1),
+  (2, 2);
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
 ---------------------VIEW---------------------------------------------------
 --_______________________view raccolto______________________________
@@ -599,6 +603,7 @@ FROM
 
 --_______________________view coltivatore______________________________
 CREATE OR REPLACE VIEW coltivatoreview AS 
+--new
 SELECT
     -- Informazioni Coltivatore
     c.username AS username_coltivatore,
@@ -644,8 +649,7 @@ SELECT
     r.giorno_inizio AS data_inizio_raccolta,
     r.giorno_fine  AS data_fine_raccolta,
     
-    -- INFORMAZIONI COLTURA
-    col.tipo AS tipo_coltura,
+    -- INFORMAZIONI COLTURA (rimosso 'tipo' poiché non esiste in Coltura)
     col.varietà AS varieta_coltura
     
 FROM Coltivatore AS c
@@ -658,8 +662,9 @@ FROM Coltivatore AS c
     LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
     LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
    
-    LEFT JOIN Contiene cont ON l.ID_Lotto = cont.ID_Lotto
-    LEFT JOIN Coltura col ON cont.ID_Coltura = col.ID_Coltura
+    -- CORREZIONE: Join su Progetto_Coltura tramite il progetto (pc), poi su Coltura
+    LEFT JOIN Progetto_Coltura AS pcol ON pc.ID_Progetto = pcol.id_progetto
+    LEFT JOIN Coltura col ON pcol.id_coltura = col.ID_Coltura
 ORDER BY 
     c.cognome,
     c.nome,  
