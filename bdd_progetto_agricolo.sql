@@ -672,12 +672,14 @@ ORDER BY
     pc.ID_Progetto,
     att.giorno_Assegnazione;
 --_______________________view coltura______________________________
-CREATE OR REPLACE VIEW view_coltura AS
-SELECT c.tipo, 
-c.varietà,
-con.id_lotto
 
-FROM Coltura AS c 
-NATURAL JOIN Contiene AS con
 
 ---------------------VIEW---------------------------------------------------
+CREATE OR REPLACE VIEW ComboListaColture
+	SELECT 
+    pc.id_progetto,
+    col.varietà
+FROM Progetto_Coltivazione pc
+JOIN Progetto_Coltura pcol ON pc.id_progetto = pcol.id_progetto
+JOIN Coltura col ON pcol.id_coltura = col.id_coltura
+ORDER BY pc.id_progetto, col.varietà;
