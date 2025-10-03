@@ -676,14 +676,16 @@ ORDER BY
 
 ---------------------VIEW---------------------------------------------------
 --_______________________view ComboListaColture______________________________
-CREATE OR REPLACE VIEW ComboListaColture
-	SELECT 
+CREATE OR REPLACE VIEW ComboListaColture AS
+SELECT 
     pc.id_progetto,
+    osp.id_lotto,
     col.varietà
 FROM Progetto_Coltivazione pc
+JOIN Ospita_Lotto_Progetto osp ON pc.id_progetto = osp.id_progetto
 JOIN Progetto_Coltura pcol ON pc.id_progetto = pcol.id_progetto
 JOIN Coltura col ON pcol.id_coltura = col.id_coltura
-ORDER BY pc.id_progetto, col.varietà;
+ORDER BY pc.id_progetto, osp.id_lotto, col.varietà;
 --_______________________view ComboListaColture______________________________
 
 --_______________________view ComboProgettiColtivatore______________________________
