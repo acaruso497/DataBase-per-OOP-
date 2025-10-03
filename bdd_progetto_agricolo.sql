@@ -752,4 +752,47 @@ LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
 ORDER BY att.giorno_Assegnazione;
 --_______________________view AttivitaColtivatore______________________________
 
+--_______________________view ComboAttivitaColtivatore______________________________
+CREATE OR REPLACE VIEW ComboAttivitaColtivatore AS
+SELECT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    s.ID_Semina AS id_semina,
+    i.ID_Irrigazione AS id_irrigazione,
+    r.ID_Raccolta AS id_raccolta,
+    att.giorno_Assegnazione AS giorno_assegnazione
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+ORDER BY att.giorno_Assegnazione;
+--_______________________view ComboAttivitaColtivatore______________________________
+
+--_______________________view VisualizzaLottoColtivatore______________________________
+CREATE OR REPLACE VIEW VisualizzaLottoColtivatore AS
+SELECT DISTINCT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    l.ID_Lotto AS id_lotto,
+    l.posizione
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+ORDER BY pc.titolo;
+--_______________________view VisualizzaLottoColtivatore______________________________
+
+--_______________________view esperienza_coltivatore______________________________
+CREATE OR REPLACE VIEW esperienza_coltivatore AS
+SELECT 
+    username,
+    esperienza
+FROM Coltivatore
+ORDER BY username;
+--_______________________view esperienza_coltivatore______________________________
 
