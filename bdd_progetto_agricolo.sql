@@ -796,3 +796,49 @@ FROM Coltivatore
 ORDER BY username;
 --_______________________view esperienza_coltivatore______________________________
 
+--_______________________view stima_raccoltoColtivatore______________________________
+CREATE OR REPLACE VIEW stima_raccoltoColtivatore AS
+SELECT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    r.raccolto_effettivo
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+ORDER BY pc.titolo;
+--_______________________view stima_raccoltoColtivatore______________________________
+
+--_______________________view tipologia_seminaColtivatore______________________________
+CREATE OR REPLACE VIEW tipologia_seminaColtivatore AS
+SELECT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    s.tipo_semina
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+ORDER BY pc.titolo;
+--_______________________view tipologia_seminaColtivatore______________________________
+
+--_______________________view ComboTipologiaColturaColtivatore______________________________
+CREATE OR REPLACE VIEW ComboTipologiaColturaColtivatore AS
+SELECT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    col.varietà AS varieta_coltura
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+JOIN Progetto_Coltura pcol ON pc.ID_Progetto = pcol.id_progetto
+JOIN Coltura col ON pcol.id_coltura = col.id_coltura
+ORDER BY pc.titolo, col.varietà;
+--_______________________view ComboTipologiaColturaColtivatore______________________________
+
