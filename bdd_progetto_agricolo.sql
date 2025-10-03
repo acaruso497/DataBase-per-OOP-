@@ -48,13 +48,7 @@ CREATE TABLE Coltura (
   ID_Coltura            INT PRIMARY KEY,
   varietà               VARCHAR(50),
   tipo                  VARCHAR(50),
-  raccoltoProdotto    	INT,
-
-  
-  CONSTRAINT chk_mese_semina
-    CHECK (
-      EXTRACT(MONTH FROM periodo_semina) BETWEEN 2 AND 7
-    )
+  raccoltoProdotto    	INT DEFAULT 0
 );
 
 CREATE TABLE Lotto (
@@ -487,10 +481,10 @@ VALUES
   (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y');
 
 -- Popolamento Coltura
-INSERT INTO Coltura (varietà, tipo, tempi_maturazione, frequenza_irrigazione, periodo_semina)
+INSERT INTO Coltura (varietà)
 VALUES
-  ('Pomodoro San Marzano', 'Ortaggio', 80, 3, '2025-03-15'),
-  ('Zucchina Chiara',      'Ortaggio', 60, 4, '2025-04-20');
+  ('Pomodoro San Marzano'),
+  ('Zucchina Chiara');
 
 -- Popolamento Attività
 INSERT INTO Attivita (Codice_FiscaleCol, ID_Lotto, stato) 
