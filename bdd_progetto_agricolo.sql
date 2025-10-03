@@ -842,3 +842,47 @@ JOIN Coltura col ON pcol.id_coltura = col.id_coltura
 ORDER BY pc.titolo, col.varietà;
 --_______________________view ComboTipologiaColturaColtivatore______________________________
 
+--_______________________view irrigazione_coltivatore______________________________
+CREATE OR REPLACE VIEW irrigazione_coltivatore AS
+SELECT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    i.tipo_irrigazione
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+ORDER BY pc.titolo;
+--_______________________view irrigazione_coltivatore______________________________
+
+--_______________________view tipo_seminacoltivatore______________________________
+CREATE OR REPLACE VIEW semina_view AS
+SELECT 
+    ID_Semina AS id_semina,
+    tipo_semina
+FROM Semina
+ORDER BY ID_Semina;
+--_______________________view tipo_seminacoltivatore______________________________
+
+--_______________________view tipi_attivita_coltivatore______________________________
+CREATE OR REPLACE VIEW tipi_attivita_coltivatore AS
+SELECT 
+    c.username AS username_coltivatore,
+    pc.titolo AS titolo_progetto,
+    s.ID_Semina AS id_semina,
+    i.ID_Irrigazione AS id_irrigazione,
+    r.ID_Raccolta AS id_raccolta,
+    att.giorno_Assegnazione AS giorno_assegnazione
+FROM Coltivatore c
+JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
+JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+ORDER BY att.giorno_Assegnazione;
+--_______________________view tipi_attivita_coltivatore______________________________
+
