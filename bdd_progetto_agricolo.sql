@@ -886,3 +886,15 @@ LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
 ORDER BY att.giorno_Assegnazione;
 --_______________________view tipi_attivita_coltivatore______________________________
 
+--_______________________view controllocolture______________________________
+CREATE OR REPLACE VIEW controllocolture AS
+SELECT 
+    l.ID_Lotto AS id_lotto,
+    col.varietà
+FROM Lotto l
+JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
+JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+JOIN Progetto_Coltura pcol ON pc.ID_Progetto = pcol.id_progetto
+JOIN Coltura col ON pcol.id_coltura = col.id_coltura
+ORDER BY l.ID_Lotto, col.varietà;
+--_______________________view controllocolture______________________________
