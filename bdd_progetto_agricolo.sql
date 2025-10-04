@@ -47,7 +47,6 @@ CREATE TABLE Progetto_Coltivazione (
 CREATE TABLE Coltura (
   ID_Coltura            INT PRIMARY KEY,
   varietà               VARCHAR(50),
-  tipo                  VARCHAR(50),
   raccoltoProdotto    	INT DEFAULT 0
 );
 
@@ -896,3 +895,22 @@ JOIN Progetto_Coltura pcol ON pc.ID_Progetto = pcol.id_progetto
 JOIN Coltura col ON pcol.id_coltura = col.id_coltura
 ORDER BY l.ID_Lotto, col.varietà;
 --_______________________view controllocolture______________________________
+
+--_______________________view sommaRaccoltiColtivatore______________________________
+CREATE OR REPLACE VIEW sommaRaccolti AS
+SELECT 
+    pc.ID_Progetto AS id_progetto,
+    pc.titolo AS titolo_progetto,
+    col.varietà,
+    r.ID_Raccolta AS id_raccolta,
+    col.raccoltoProdotto
+FROM Progetto_Coltivazione pc
+JOIN Ospita_Lotto_Progetto osp ON pc.ID_Progetto = osp.ID_Progetto
+JOIN Lotto l ON osp.ID_Lotto = l.ID_Lotto
+JOIN Attivita att ON l.ID_Lotto = att.ID_Lotto
+LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+JOIN Progetto_Coltura pcol ON pc.ID_Progetto = pcol.id_progetto
+JOIN Coltura col ON pcol.id_coltura = col.ID_Coltura
+GROUP BY pc.ID_Progetto, pc.titolo, col.varietà, r.ID_Raccolta, col.raccoltoProdotto
+ORDER BY pc.ID_Progetto, pc.titolo, col.varietà, r.ID_Raccolta;
+--_______________________view sommaRaccoltiColtivatore______________________________
