@@ -495,27 +495,32 @@ INSERT INTO Attivita (Codice_FiscaleCol, ID_Lotto, stato)
 VALUES
   ('GRCNCL92P10F839Z', 1, 'pianificata'),
   ('FRLRMN90A01L736X', 2, 'pianificata'),
-  ('CRSNTN99C20L378W', 1, 'pianificata');
+  ('CRSNTN99C20L378W', 1, 'pianificata'),
+  ('GRCNCL92P10F839Z', 3, 'pianificata');
   
 -- Popolamento Semina
 INSERT INTO Semina (giorno_inizio, giorno_fine, profondita, tipo_semina, ID_Attivita) 
 VALUES
   ('2023-01-20', '2023-01-25', 10, 'Diretta', 1),
   ('2023-02-25', '2023-03-02', 10, 'In semenzaio', 2),
-  ('2023-03-15', '2023-03-20', 10, 'A spaglio', 3);
+  ('2023-03-15', '2023-03-20', 10, 'A spaglio', 3),
+  ('2023-03-17', '2023-03-28', 10, 'A spaglio', 4);
 
 -- Popolamento Irrigazione
 INSERT INTO Irrigazione (giorno_inizio, giorno_fine, tipo_irrigazione, ID_Attivita) 
 VALUES
   ('2023-01-30', '2023-02-05', 'a goccia', 1),
   ('2023-03-10', '2023-03-15', 'a pioggia', 2),
-  ('2023-03-25', '2023-03-30', 'per scorrimento', 3);
+  ('2023-03-25', '2023-03-30', 'per scorrimento', 3),
+  ('2023-03-29', '2023-04-01', 'per scorrimento', 4);
+  
   
 -- Popolamento Raccolta
 INSERT INTO Raccolta (giorno_inizio, giorno_fine, raccolto_effettivo, ID_Attivita) 
 VALUES
   ('2023-06-10', '2023-06-15', 250.50, 1),
-  ('2023-07-05', '2023-07-10', 180.75, 2);
+  ('2023-07-05', '2023-07-10', 180.75, 2),
+  ('2023-07-15', '2023-07-20', 200.15, 3);
 
 -- Popolamento Notifica
 INSERT INTO Notifica
@@ -566,17 +571,17 @@ VALUES
 --_______________________view raccolto______________________________
 CREATE OR REPLACE VIEW view_raccolto AS
 SELECT
-    ra.raccolto_effettivo,
+    Prog_c.id_progetto,
+    Prog_c.data_inizio,
+    Prog_c.data_fine,
     Prog_c.stima_raccolto,
-	Prog_c.data_inizio,
-	Prog_c.data_fine,
-    prop.Codice_Fiscale
+    ra.raccolto_effettivo
 FROM
-    Lotto AS L
-    JOIN Progetto_Coltivazione AS Prog_c ON l.id_progetto=Prog_c.id_progetto
-	JOIN Attivita AS a ON a.id_lotto=L.id_lotto
-    JOIN Raccolta AS ra ON ra.id_attivita=a.id_attivita
-    JOIN Proprietario AS prop ON prop.Codice_Fiscale=a.Codice_FiscaleCol;
+    Progetto_Coltivazione AS Prog_c
+    JOIN Lotto AS l ON l.id_progetto = Prog_c.id_progetto
+    LEFT JOIN Attivita AS a ON a.id_lotto = l.id_lotto
+    LEFT JOIN Raccolta AS ra ON ra.id_attivita = a.id_attivita
+    LEFT JOIN Coltivatore AS col ON col.Codice_Fiscale = a.Codice_FiscaleCol;
 
 --_______________________view raccolto______________________________
 
