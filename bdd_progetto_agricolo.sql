@@ -42,8 +42,7 @@ CREATE TABLE Progetto_Coltivazione (
   data_fine        DATE     NOT NULL,
   ID_Lotto         INT  UNIQUE NOT NULL,
   CONSTRAINT chk_intervallo_date
-    CHECK (data_fine >= data_inizio),
-	FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto)
+    CHECK (data_fine >= data_inizio)
 );
 
 CREATE TABLE Coltura (
@@ -65,7 +64,7 @@ CREATE TABLE Lotto (
   ID_Progetto        INT  UNIQUE NOT NULL,
   CONSTRAINT uq_posizione UNIQUE (posizione),
   FOREIGN KEY (Codice_FiscalePr) REFERENCES Proprietario(Codice_Fiscale),
-	FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto)
+  FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto)
 );
 
 
@@ -476,18 +475,18 @@ INSERT INTO Progetto_Coltivazione (titolo, descrizione, stima_raccolto, data_ini
 VALUES 
   ('Coltivazione zucchine', 'Progetto dedicato alla coltivazione delle zucchine chiare', 1200, '2025-04-01', '2025-07-01', 1),
   ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01', 2);
+
 -- Popolamento Lotto
-INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr) 
+INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr, ID_Progetto) 
 VALUES
-  (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X'),
-  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y'),
-  (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y');
+  (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X', 1),
+  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y', 2);
 
 -- Popolamento Coltura
 INSERT INTO Coltura (varietà)
 VALUES
-  ('Pomodoro San Marzano'),
-  ('Zucchina Chiara');
+  ('Zucchina Chiara'),
+  ('Pomodoro San Marzano');
 
 -- Popolamento Attività
 INSERT INTO Attivita (Codice_FiscaleCol, ID_Lotto, stato) 
@@ -514,8 +513,7 @@ VALUES
 INSERT INTO Raccolta (giorno_inizio, giorno_fine, raccolto_effettivo, ID_Attivita) 
 VALUES
   ('2023-06-10', '2023-06-15', 250.50, 1),
-  ('2023-07-05', '2023-07-10', 180.75, 2),
-  ('2023-08-12', '2023-08-18', 320.00, 3);
+  ('2023-07-05', '2023-07-10', 180.75, 2);
 
 -- Popolamento Notifica
 INSERT INTO Notifica
@@ -559,8 +557,7 @@ VALUES
 INSERT INTO Progetto_Coltura (ID_Coltura, ID_Progetto)
 VALUES
   (1, 1),
-  (2, 2),
-  (2, 3);
+  (2, 2);
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
 ---------------------VIEW---------------------------------------------------
 --_______________________view raccolto______________________________
@@ -575,7 +572,7 @@ FROM
     Lotto AS L
     JOIN Progetto_Coltivazione AS Prog_c ON l.id_progetto=Prog_c.id_progetto
 	JOIN Attivita AS a ON a.id_lotto=L.id_lotto
-    JOIN Raccolta AS ra ON r.id_attivita=a.id_attivita
+    JOIN Raccolta AS ra ON ra.id_attivita=a.id_attivita
     JOIN Proprietario AS prop ON prop.Codice_Fiscale=a.Codice_FiscaleCol;
 
 --_______________________view raccolto______________________________
@@ -831,10 +828,10 @@ col.raccoltoprodotto,
 col.varietà,
 pcol.id_coltura,
 pc.id_progetto,
-l.id_lotto
+l.ID_Lotto
 FROM Coltura AS col
 LEFT JOIN Progetto_Coltura AS pcol ON col.id_coltura=pcol.id_coltura
 LEFT JOIN Progetto_Coltivazione AS pc ON pc.id_progetto=pcol.id_progetto
-LEFT JOIN Lotto AS l ON l.id_lotto=pc.id_lotto
+LEFT JOIN Lotto AS l ON l.ID_Lotto=pc.ID_Lotto
 --_______________________view ProprietarioRaccoltoColture______________________________
 
