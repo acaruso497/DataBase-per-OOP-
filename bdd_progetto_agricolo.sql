@@ -532,13 +532,6 @@ CREATE TABLE Invia (
   FOREIGN KEY (Codice_FiscalePr) REFERENCES Proprietario(Codice_Fiscale)
 );
 
-CREATE TABLE Contiene (
-  ID_Lotto INT,
-  ID_Coltura INT,
-  PRIMARY KEY (ID_Lotto, ID_Coltura),
-  FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto),
-  FOREIGN KEY (ID_Coltura) REFERENCES Coltura(ID_Coltura)
-);
 
 CREATE TABLE Ospita_Lotto_Progetto (
   ID_Lotto INT,
