@@ -481,7 +481,7 @@ VALUES
 INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr) 
 VALUES
   (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X'),
-  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y');
+  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y'),
   (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y');
 
 -- Popolamento Coltura
