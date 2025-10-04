@@ -40,8 +40,10 @@ CREATE TABLE Progetto_Coltivazione (
   stima_raccolto   NUMERIC,
   data_inizio      DATE     NOT NULL,
   data_fine        DATE     NOT NULL,
+  ID_Lotto         INT  UNIQUE NOT NULL,
   CONSTRAINT chk_intervallo_date
-    CHECK (data_fine >= data_inizio)
+    CHECK (data_fine >= data_inizio),
+	FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto)
 );
 
 CREATE TABLE Coltura (
@@ -60,8 +62,10 @@ CREATE TABLE Lotto (
   costo_terreno  NUMERIC    NOT NULL
                    CHECK (costo_terreno = 300),
   Codice_FiscalePr VARCHAR(16),
+  ID_Progetto        INT  UNIQUE NOT NULL,
   CONSTRAINT uq_posizione UNIQUE (posizione),
-  FOREIGN KEY (Codice_FiscalePr) REFERENCES Proprietario(Codice_Fiscale)
+  FOREIGN KEY (Codice_FiscalePr) REFERENCES Proprietario(Codice_Fiscale),
+	FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto)
 );
 
 
@@ -533,14 +537,6 @@ CREATE TABLE Invia (
 );
 
 
-CREATE TABLE Ospita_Lotto_Progetto (
-  ID_Lotto INT,
-  ID_Progetto INT,
-  PRIMARY KEY (ID_Lotto, ID_Progetto),
-  FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto),
-  FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto)
-);
-
 CREATE TABLE Progetto_Coltura (
   ID_Progetto INT,
   ID_Coltura  INT,
@@ -559,12 +555,7 @@ VALUES
   (1, 'SGNMRA88A41F205X'),
   (2, 'DMNSRG85T12C351Y');
 
--- Associazione Lotto → Progetto_Coltivazione
-INSERT INTO Ospita_Lotto_Progetto (ID_Lotto, ID_Progetto)
-VALUES
-  (1, 1),
-  (2, 2);
-
+-- Associazione Progetto → Coltura
 INSERT INTO Progetto_Coltura (ID_Coltura, ID_Progetto)
 VALUES
   (1, 1),
