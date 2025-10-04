@@ -914,3 +914,18 @@ JOIN Coltura col ON pcol.id_coltura = col.ID_Coltura
 GROUP BY pc.ID_Progetto, pc.titolo, col.varietà, r.ID_Raccolta, col.raccoltoProdotto
 ORDER BY pc.ID_Progetto, pc.titolo, col.varietà, r.ID_Raccolta;
 --_______________________view sommaRaccoltiColtivatore______________________________
+
+--_______________________view ProprietarioRaccoltoColture______________________________
+CREATE OR REPLACE VIEW ProprietarioRaccoltoColture AS
+SELECT 
+col.raccoltoprodotto,
+col.varietà,
+pcol.id_coltura,
+pc.id_progetto,
+olp.id_lotto
+FROM Coltura AS col
+LEFT JOIN Progetto_Coltura AS pcol ON col.id_coltura=pcol.id_coltura
+LEFT JOIN Progetto_Coltivazione AS pc ON pc.id_progetto=pcol.id_progetto
+LEFT JOIN Ospita_Lotto_Progetto AS olp ON olp.id_progetto=pc.id_progetto
+--_______________________view ProprietarioRaccoltoColture______________________________
+
