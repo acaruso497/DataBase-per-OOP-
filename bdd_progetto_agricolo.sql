@@ -474,13 +474,15 @@ VALUES
 INSERT INTO Progetto_Coltivazione (titolo, descrizione, stima_raccolto, data_inizio, data_fine, ID_Lotto)
 VALUES 
   ('Coltivazione zucchine', 'Progetto dedicato alla coltivazione delle zucchine chiare', 1200, '2025-04-01', '2025-07-01', 1),
-  ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01', 2);
+  ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01', 2),
+  ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01', 3);
 
 -- Popolamento Lotto
 INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr, ID_Progetto) 
 VALUES
   (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X', 1),
-  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y', 2);
+  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y', 2),
+  (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y', 3);
 
 -- Popolamento Coltura
 INSERT INTO Coltura (varietà)
@@ -557,7 +559,8 @@ VALUES
 INSERT INTO Progetto_Coltura (ID_Coltura, ID_Progetto)
 VALUES
   (1, 1),
-  (2, 2);
+  (2, 2),
+  (2, 3);
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
 ---------------------VIEW---------------------------------------------------
 --_______________________view raccolto______________________________
