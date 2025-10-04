@@ -692,6 +692,7 @@ JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
 JOIN Ospita_Lotto_Progetto osp ON l.ID_Lotto = osp.id_lotto
 JOIN Progetto_Coltivazione pc ON osp.id_progetto = pc.ID_Progetto
+GROUP BY c.username, pc.titolo  -- Questo elimina i duplicati per username/titolo
 ORDER BY pc.titolo;
 --_______________________view ComboProgettiColtivatore______________________________
 
