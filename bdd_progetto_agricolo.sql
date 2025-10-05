@@ -40,10 +40,12 @@ CREATE TABLE Progetto_Coltivazione (
   stima_raccolto   NUMERIC,
   data_inizio      DATE     NOT NULL,
   data_fine        DATE     NOT NULL,
-  ID_Lotto         INT  UNIQUE NOT NULL,
+  ID_Lotto         INT  NOT NULL,
+  done             BOOLEAN DEFAULT false,
   CONSTRAINT chk_intervallo_date
     CHECK (data_fine >= data_inizio)
 );
+
 
 CREATE TABLE Coltura (
   ID_Coltura            INT PRIMARY KEY,
@@ -61,7 +63,7 @@ CREATE TABLE Lotto (
   costo_terreno  NUMERIC    NOT NULL
                    CHECK (costo_terreno = 300),
   Codice_FiscalePr VARCHAR(16),
-  ID_Progetto        INT  UNIQUE NOT NULL,
+  ID_Progetto        INT NOT NULL,
   CONSTRAINT uq_posizione UNIQUE (posizione),
   FOREIGN KEY (Codice_FiscalePr) REFERENCES Proprietario(Codice_Fiscale),
   FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto)
@@ -520,7 +522,8 @@ INSERT INTO Raccolta (giorno_inizio, giorno_fine, raccolto_effettivo, ID_Attivit
 VALUES
   ('2023-06-10', '2023-06-15', 250.50, 1),
   ('2023-07-05', '2023-07-10', 180.75, 2),
-  ('2023-07-15', '2023-07-20', 200.15, 3);
+  ('2023-07-15', '2023-07-20', 200.15, 3),
+  ('2023-07-20', '2023-07-30', 280.15, 4);
 
 -- Popolamento Notifica
 INSERT INTO Notifica
@@ -604,12 +607,13 @@ ORDER BY pc.id_progetto, l.id_lotto, col.varietà;
 CREATE OR REPLACE VIEW ComboProgettiColtivatore AS
 SELECT  
     c.username AS username_coltivatore,
-    pc.titolo AS titolo_progetto
+    pc.titolo AS titolo_progetto,
+	pc.done
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
 JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
-GROUP BY c.username, pc.titolo  
+GROUP BY c.username, pc.titolo, pc.done  
 ORDER BY pc.titolo;
 --_______________________view ComboProgettiColtivatore______________________________
 
@@ -817,16 +821,17 @@ SELECT
     pc.ID_Progetto AS id_progetto,
     pc.titolo AS titolo_progetto,
     col.varietà,
-    r.ID_Raccolta AS id_raccolta,
-    col.raccoltoProdotto
+    r.ID_Raccolta,
+    col.raccoltoProdotto,
+    c.username
 FROM Progetto_Coltivazione pc
 JOIN Lotto l ON l.ID_Lotto = pc.ID_Lotto
 JOIN Attivita att ON l.ID_Lotto = att.ID_Lotto
 LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+JOIN Coltivatore c ON att.Codice_FiscaleCol = c.Codice_Fiscale
 JOIN Progetto_Coltura pcol ON pc.ID_Progetto = pcol.id_progetto
 JOIN Coltura col ON pcol.id_coltura = col.ID_Coltura
-GROUP BY pc.ID_Progetto, pc.titolo, col.varietà, r.ID_Raccolta, col.raccoltoProdotto
-ORDER BY pc.ID_Progetto, pc.titolo, col.varietà, r.ID_Raccolta;
+ORDER BY pc.ID_Progetto, col.varietà;
 --_______________________view sommaRaccoltiColtivatore______________________________
 
 --_______________________view ProprietarioRaccoltoColture______________________________
