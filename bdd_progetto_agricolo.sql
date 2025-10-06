@@ -552,7 +552,14 @@ CREATE TABLE Progetto_Coltura (
   FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto),
   FOREIGN KEY (ID_Coltura) REFERENCES Coltura(ID_Coltura)
 );
-
+CREATE TABLE Lotto_Coltivatore (
+    ID_Lotto INT,
+    Codice_Fiscale VARCHAR(16),
+    data_assegnazione DATE NOT NULL DEFAULT CURRENT_DATE,
+    PRIMARY KEY (ID_Lotto, Codice_Fiscale),
+    FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto),
+    FOREIGN KEY (Codice_Fiscale) REFERENCES Coltivatore(Codice_Fiscale)
+);
 ----------------------TABELLE PONTE-----------------------------------
 
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
