@@ -33,26 +33,6 @@ CREATE TABLE Coltivatore (
     )
 );
 
-CREATE TABLE Progetto_Coltivazione (
-  ID_Progetto     INT      PRIMARY KEY,
-  titolo       VARCHAR(100) NOT NULL,
-  descrizione VARCHAR(200) NOT NULL,
-  stima_raccolto   NUMERIC,
-  data_inizio      DATE     NOT NULL,
-  data_fine        DATE     NOT NULL,
-  ID_Lotto         INT  NOT NULL,
-  done             BOOLEAN DEFAULT false,
-  CONSTRAINT chk_intervallo_date
-    CHECK (data_fine >= data_inizio)
-);
-
-
-CREATE TABLE Coltura (
-  ID_Coltura            INT PRIMARY KEY,
-  varietà               VARCHAR(50),
-  raccoltoProdotto    	INT DEFAULT 0
-);
-
 CREATE TABLE Lotto (
   ID_Lotto       INT        PRIMARY KEY,
   metri_quadri   NUMERIC    NOT NULL
@@ -63,10 +43,29 @@ CREATE TABLE Lotto (
   costo_terreno  NUMERIC    NOT NULL
                    CHECK (costo_terreno = 300),
   Codice_FiscalePr VARCHAR(16),
-  ID_Progetto        INT NOT NULL,
   CONSTRAINT uq_posizione UNIQUE (posizione),
-  FOREIGN KEY (Codice_FiscalePr) REFERENCES Proprietario(Codice_Fiscale),
-  FOREIGN KEY (ID_Progetto) REFERENCES Progetto_Coltivazione(ID_Progetto)
+  FOREIGN KEY (Codice_FiscalePr) REFERENCES Proprietario(Codice_Fiscale)
+);
+
+CREATE TABLE Progetto_Coltivazione (
+  ID_Progetto     INT      PRIMARY KEY,
+  titolo       VARCHAR(100) NOT NULL,
+  descrizione VARCHAR(200) NOT NULL,
+  stima_raccolto   NUMERIC,
+  data_inizio      DATE     NOT NULL,
+  data_fine        DATE     NOT NULL,
+  ID_Lotto         INT  NOT NULL,
+  done             BOOLEAN DEFAULT false,
+  CONSTRAINT chk_intervallo_date
+    CHECK (data_fine >= data_inizio),
+FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto)
+);
+
+
+CREATE TABLE Coltura (
+  ID_Coltura            INT PRIMARY KEY,
+  varietà               VARCHAR(50),
+  raccoltoProdotto    	INT DEFAULT 0
 );
 
 
@@ -472,25 +471,26 @@ VALUES
   ('FRLRMN90A01L736X', 'Armando',  'Fiorillo', 'arfior','Arma'),
   ('CRSNTN99C20L378W', 'Antonio',  'Caruso',   'antcar','Anto' );
 
+-- Popolamento Lotto
+INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr) 
+VALUES
+  (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X'),
+  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y'),
+  (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y');
+
 -- Popolamento Progetto_Coltivazione 
 INSERT INTO Progetto_Coltivazione (titolo, descrizione, stima_raccolto, data_inizio, data_fine, ID_Lotto)
 VALUES 
   ('Coltivazione zucchine', 'Progetto dedicato alla coltivazione delle zucchine chiare', 1200, '2025-04-01', '2025-07-01', 1),
   ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01', 2),
-  ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01', 3);
-
--- Popolamento Lotto
-INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr, ID_Progetto) 
-VALUES
-  (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X', 1),
-  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y', 2),
-  (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y', 3);
+  ('Coltivazione pomodoro datterino', 'Progetto dedicato alla coltivazione dei pomodori datterini gialli', 800, '2025-05-15', '2025-09-01', 3);
 
 -- Popolamento Coltura
 INSERT INTO Coltura (varietà)
 VALUES
   ('Zucchina Chiara'),
-  ('Pomodoro San Marzano');
+  ('Pomodoro San Marzano'),
+  ('Pomodoro Datterino Giallo');
 
 -- Popolamento Attività
 INSERT INTO Attivita (Codice_FiscaleCol, ID_Lotto, stato) 
@@ -503,28 +503,28 @@ VALUES
 -- Popolamento Semina
 INSERT INTO Semina (giorno_inizio, giorno_fine, profondita, tipo_semina, ID_Attivita) 
 VALUES
-  ('2023-01-20', '2023-01-25', 10, 'Diretta', 1),
-  ('2023-02-25', '2023-03-02', 10, 'In semenzaio', 2),
-  ('2023-03-15', '2023-03-20', 10, 'A spaglio', 3),
-  ('2023-03-17', '2023-03-28', 10, 'A spaglio', 4);
+('2025-04-05', '2025-04-10', 10, 'Diretta', 1),        
+('2025-05-05', '2025-05-10', 10, 'In semenzaio', 2),     
+('2025-04-15', '2025-04-20', 10, 'A spaglio', 3),      
+('2025-05-20', '2025-05-25', 10, 'A spaglio', 4);   
 
 -- Popolamento Irrigazione
 INSERT INTO Irrigazione (giorno_inizio, giorno_fine, tipo_irrigazione, ID_Attivita) 
 VALUES
-  ('2023-01-30', '2023-02-05', 'a goccia', 1),
-  ('2023-03-10', '2023-03-15', 'a pioggia', 2),
-  ('2023-03-25', '2023-03-30', 'per scorrimento', 3),
-  ('2023-03-29', '2023-04-01', 'per scorrimento', 4);
+ ('2025-04-15', '2025-04-25', 'a goccia', 1),           
+ ('2025-05-20', '2025-05-30', 'a pioggia', 2),          
+ ('2025-04-25', '2025-05-05', 'per scorrimento', 3),   
+ ('2025-05-30', '2025-06-05', 'per scorrimento', 4);   
   
   
 -- Popolamento Raccolta
 INSERT INTO Raccolta (giorno_inizio, giorno_fine, raccolto_effettivo, ID_Attivita) 
 VALUES
-  ('2023-06-10', '2023-06-15', 250.50, 1),
-  ('2023-07-05', '2023-07-10', 180.75, 2),
-  ('2023-07-15', '2023-07-20', 200.15, 3),
-  ('2023-07-20', '2023-07-30', 280.15, 4);
-
+  ('2025-06-10', '2025-06-20', 250.50, 1),             
+  ('2025-07-05', '2025-07-15', 180.75, 2),              
+  ('2025-06-25', '2025-07-05', 200.15, 3),             
+  ('2025-08-20', '2025-08-30', 280.15, 4);  
+  
 -- Popolamento Notifica
 INSERT INTO Notifica
 (Attivita_programmate, Data_evento, Utenti_tag, Tutti_colt, Titolo, Descrizione, Lettura, ID_Attivita)
@@ -568,7 +568,7 @@ INSERT INTO Progetto_Coltura (ID_Coltura, ID_Progetto)
 VALUES
   (1, 1),
   (2, 2),
-  (2, 3);
+  (3, 3);
 ---------------------POPOLAMENTO TABELLE PONTE------------------------------
 ---------------------VIEW---------------------------------------------------
 --_______________________view raccolto______________________________
@@ -581,7 +581,7 @@ SELECT
     ra.raccolto_effettivo
 FROM
     Progetto_Coltivazione AS Prog_c
-    JOIN Lotto AS l ON l.id_progetto = Prog_c.id_progetto
+    JOIN Lotto AS l ON l.ID_Lotto = Prog_c.ID_Lotto 
     LEFT JOIN Attivita AS a ON a.id_lotto = l.id_lotto
     LEFT JOIN Raccolta AS ra ON ra.id_attivita = a.id_attivita
     LEFT JOIN Coltivatore AS col ON col.Codice_Fiscale = a.Codice_FiscaleCol;
@@ -597,7 +597,7 @@ SELECT
     l.id_lotto,
     col.varietà
 FROM Progetto_Coltivazione pc
-JOIN Lotto AS l ON l.id_lotto=pc.id_lotto
+JOIN Lotto AS l ON l.id_lotto = pc.id_lotto 
 JOIN Progetto_Coltura pcol ON pc.id_progetto = pcol.id_progetto
 JOIN Coltura col ON pcol.id_coltura = col.id_coltura
 ORDER BY pc.id_progetto, l.id_lotto, col.varietà;
@@ -608,11 +608,11 @@ CREATE OR REPLACE VIEW ComboProgettiColtivatore AS
 SELECT  
     c.username AS username_coltivatore,
     pc.titolo AS titolo_progetto,
-	pc.done
+    pc.done
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.id_lotto = l.ID_Lotto 
 GROUP BY c.username, pc.titolo, pc.done  
 ORDER BY pc.titolo;
 --_______________________view ComboProgettiColtivatore______________________________
@@ -627,32 +627,74 @@ SELECT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 ORDER BY pc.titolo;
 --_______________________view date_progetti_coltivatore______________________________
 
 --_______________________view DateAttivitaColtivatore______________________________
 CREATE OR REPLACE VIEW DateAttivitaColtivatore AS
-SELECT  
-    att.ID_Attivita,
-	l.id_lotto,
-	pc.id_progetto,
-	s.id_semina,
-	i.id_irrigazione,
-	r.id_raccolta,
-    s.giorno_inizio AS data_inizio_semina,
-    s.giorno_fine AS data_fine_semina,
-    i.giorno_inizio AS data_inizio_irrigazione,
-    i.giorno_fine AS data_fine_irrigazione,
-    r.giorno_inizio AS data_inizio_raccolta,
-    r.giorno_fine AS data_fine_raccolta
-FROM Progetto_Coltivazione AS pc
-LEFT JOIN Lotto AS l ON l.id_lotto=pc.id_lotto
-LEFT JOIN Attivita att ON att.id_lotto=l.id_lotto
-LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
-LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
-LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
-ORDER BY att.ID_Attivita;
+SELECT 'Semina' AS tipo_attivita,
+       s.id_attivita,
+       s.stato,
+       s.giorno_inizio,
+       s.giorno_fine,
+	   c.username,
+	   pc.done,
+	   pc.titolo
+FROM Progetto_Coltivazione pc
+JOIN Lotto l      ON l.id_lotto = pc.id_lotto
+JOIN Attivita a   ON a.id_lotto = l.id_lotto
+JOIN Coltivatore c ON c.codice_fiscale=a.codice_fiscalecol
+JOIN Semina s     ON s.id_attivita = a.id_attivita
+  AND (
+       s.giorno_inizio BETWEEN pc.data_inizio AND pc.data_fine
+    OR s.giorno_fine   BETWEEN pc.data_inizio AND pc.data_fine
+    OR pc.data_inizio  BETWEEN s.giorno_inizio AND s.giorno_fine
+  )
+
+UNION ALL
+
+SELECT 'Irrigazione' AS tipo_attivita,
+       i.id_attivita,
+       i.stato,
+       i.giorno_inizio,
+       i.giorno_fine,
+	   c.username,
+	   pc.done,
+	   pc.titolo
+FROM Progetto_Coltivazione pc
+JOIN Lotto l       ON l.id_lotto = pc.id_lotto
+JOIN Attivita a    ON a.id_lotto = l.id_lotto
+JOIN Coltivatore c ON c.codice_fiscale=a.codice_fiscalecol
+JOIN Irrigazione i ON i.id_attivita = a.id_attivita
+  AND (
+       i.giorno_inizio BETWEEN pc.data_inizio AND pc.data_fine
+    OR i.giorno_fine   BETWEEN pc.data_inizio AND pc.data_fine
+    OR pc.data_inizio  BETWEEN i.giorno_inizio AND i.giorno_fine
+  )
+
+UNION ALL
+
+SELECT 'Raccolta' AS tipo_attivita,
+       r.id_attivita,
+       r.stato,
+       r.giorno_inizio,
+       r.giorno_fine,
+	    c.username,
+	  	pc.done,
+	   pc.titolo
+FROM Progetto_Coltivazione pc
+JOIN Lotto l      ON l.id_lotto = pc.id_lotto
+JOIN Attivita a   ON a.id_lotto = l.id_lotto
+JOIN Coltivatore c ON c.codice_fiscale=a.codice_fiscalecol
+JOIN Raccolta r   ON r.id_attivita = a.id_attivita
+  AND (
+       r.giorno_inizio BETWEEN pc.data_inizio AND pc.data_fine
+    OR r.giorno_fine   BETWEEN pc.data_inizio AND pc.data_fine
+    OR pc.data_inizio  BETWEEN r.giorno_inizio AND r.giorno_fine
+  )
+
+ORDER BY giorno_inizio;
 --_______________________view DateAttivitaColtivatore______________________________
 
 --_______________________view AttivitaColtivatore______________________________
@@ -668,7 +710,7 @@ SELECT
 FROM Attivita att
 JOIN Coltivatore c ON att.Codice_FiscaleCol = c.Codice_Fiscale
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
 LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
 LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
@@ -680,6 +722,7 @@ CREATE OR REPLACE VIEW ComboAttivitaColtivatore AS
 SELECT 
     c.username AS username_coltivatore,
     pc.titolo AS titolo_progetto,
+	pc.done,
     s.ID_Semina AS id_semina,
     i.ID_Irrigazione AS id_irrigazione,
     r.ID_Raccolta AS id_raccolta,
@@ -687,10 +730,10 @@ SELECT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
-LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
-LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
-LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
+JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
 ORDER BY att.giorno_Assegnazione;
 --_______________________view ComboAttivitaColtivatore______________________________
 
@@ -704,18 +747,9 @@ SELECT DISTINCT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 ORDER BY pc.titolo;
 --_______________________view VisualizzaLottoColtivatore______________________________
-
---_______________________view esperienza_coltivatore______________________________
-CREATE OR REPLACE VIEW esperienza_coltivatore AS
-SELECT 
-    username,
-    esperienza
-FROM Coltivatore
-ORDER BY username;
---_______________________view esperienza_coltivatore______________________________
 
 --_______________________view stima_raccoltoColtivatore______________________________
 CREATE OR REPLACE VIEW stima_raccoltoColtivatore AS
@@ -726,7 +760,7 @@ SELECT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
 ORDER BY pc.titolo;
 --_______________________view stima_raccoltoColtivatore______________________________
@@ -740,8 +774,8 @@ SELECT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
-LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
+JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
 ORDER BY pc.titolo;
 --_______________________view tipologia_seminaColtivatore______________________________
 
@@ -754,7 +788,7 @@ SELECT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 JOIN Progetto_Coltura pcol ON pc.ID_Progetto = pcol.id_progetto
 JOIN Coltura col ON pcol.id_coltura = col.id_coltura
 GROUP BY c.username, pc.titolo, col.varietà  
@@ -770,19 +804,10 @@ SELECT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
 ORDER BY pc.titolo;
 --_______________________view irrigazione_coltivatore______________________________
-
---_______________________view tipo_seminacoltivatore______________________________
-CREATE OR REPLACE VIEW semina_view AS
-SELECT 
-    ID_Semina AS id_semina,
-    tipo_semina
-FROM Semina
-ORDER BY ID_Semina;
---_______________________view tipo_seminacoltivatore______________________________
 
 --_______________________view tipi_attivita_coltivatore______________________________
 CREATE OR REPLACE VIEW tipi_attivita_coltivatore AS
@@ -796,7 +821,7 @@ SELECT
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
 LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
 LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
@@ -809,7 +834,7 @@ SELECT
     l.ID_Lotto AS id_lotto,
     col.varietà
 FROM Lotto l
-JOIN Progetto_Coltivazione pc ON pc.id_progetto = l.ID_Progetto
+JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
 JOIN Progetto_Coltura pcol ON pc.ID_Progetto = pcol.id_progetto
 JOIN Coltura col ON pcol.id_coltura = col.id_coltura
 ORDER BY l.ID_Lotto, col.varietà;
@@ -825,7 +850,7 @@ SELECT
     col.raccoltoProdotto,
     c.username
 FROM Progetto_Coltivazione pc
-JOIN Lotto l ON l.ID_Lotto = pc.ID_Lotto
+JOIN Lotto l ON l.ID_Lotto = pc.ID_Lotto  
 JOIN Attivita att ON l.ID_Lotto = att.ID_Lotto
 LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
 JOIN Coltivatore c ON att.Codice_FiscaleCol = c.Codice_Fiscale
@@ -845,6 +870,6 @@ l.ID_Lotto
 FROM Coltura AS col
 LEFT JOIN Progetto_Coltura AS pcol ON col.id_coltura=pcol.id_coltura
 LEFT JOIN Progetto_Coltivazione AS pc ON pc.id_progetto=pcol.id_progetto
-LEFT JOIN Lotto AS l ON l.ID_Lotto=pc.ID_Lotto
+LEFT JOIN Lotto AS l ON l.ID_Lotto=pc.ID_Lotto;  
 --_______________________view ProprietarioRaccoltoColture______________________________
 
