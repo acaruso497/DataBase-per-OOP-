@@ -706,14 +706,15 @@ SELECT
     s.ID_Semina,
     i.ID_Irrigazione,
     r.ID_Raccolta,
+	att.stato,
     att.giorno_Assegnazione AS data_inizio_attivita
 FROM Attivita att
 JOIN Coltivatore c ON att.Codice_FiscaleCol = c.Codice_Fiscale
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
 JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
-LEFT JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
-LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
-LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+JOIN Semina s ON att.ID_Attivita = s.ID_Attivita
+JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
 ORDER BY att.giorno_Assegnazione;
 --_______________________view AttivitaColtivatore______________________________
 
@@ -756,12 +757,11 @@ CREATE OR REPLACE VIEW stima_raccoltoColtivatore AS
 SELECT 
     c.username AS username_coltivatore,
     pc.titolo AS titolo_progetto,
-    r.raccolto_effettivo
+    pc.stima_raccolto
 FROM Coltivatore c
-JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
-JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
-JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
-LEFT JOIN Raccolta r ON att.ID_Attivita = r.ID_Attivita
+JOIN Attivita a ON c.codice_fiscale=a.codice_fiscalecol
+JOIN Lotto l ON l.id_lotto=a.id_lotto
+JOIN Progetto_Coltivazione pc ON pc.id_lotto=l.id_lotto
 ORDER BY pc.titolo;
 --_______________________view stima_raccoltoColtivatore______________________________
 
@@ -770,7 +770,8 @@ CREATE OR REPLACE VIEW tipologia_seminaColtivatore AS
 SELECT 
     c.username AS username_coltivatore,
     pc.titolo AS titolo_progetto,
-    s.tipo_semina
+    s.tipo_semina,
+	s.id_semina
 FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
@@ -805,7 +806,7 @@ FROM Coltivatore c
 JOIN Attivita att ON c.Codice_Fiscale = att.Codice_FiscaleCol
 JOIN Lotto l ON att.ID_Lotto = l.ID_Lotto
 JOIN Progetto_Coltivazione pc ON pc.ID_Lotto = l.ID_Lotto  
-LEFT JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
+JOIN Irrigazione i ON att.ID_Attivita = i.ID_Attivita
 ORDER BY pc.titolo;
 --_______________________view irrigazione_coltivatore______________________________
 
