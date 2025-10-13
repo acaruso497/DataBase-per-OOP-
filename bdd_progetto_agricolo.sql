@@ -575,6 +575,7 @@ VALUES
 CREATE OR REPLACE VIEW view_raccolto AS
 SELECT
     Prog_c.id_progetto,
+	Prog_c.titolo,
     Prog_c.data_inizio,
     Prog_c.data_fine,
     Prog_c.stima_raccolto,
@@ -867,6 +868,7 @@ col.raccoltoprodotto,
 col.varietà,
 pcol.id_coltura,
 pc.id_progetto,
+pc.titolo,
 l.ID_Lotto
 FROM Coltura AS col
 LEFT JOIN Progetto_Coltura AS pcol ON col.id_coltura=pcol.id_coltura
