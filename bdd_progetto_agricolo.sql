@@ -476,7 +476,27 @@ INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_
 VALUES
   (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X'),
   (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y'),
-  (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y');
+  (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y'),
+  (500, 'argilloso', 4, 300, NULL),
+  (500, 'sabbioso', 5, 300, NULL),
+  (500, 'limoso', 6, 300, NULL),
+  (500, 'argilloso', 7, 300, NULL),
+  (500, 'sabbioso', 8, 300, NULL),
+  (500, 'fertile', 9, 300, NULL),
+  (500, 'argilloso', 10, 300, NULL),
+  (500, 'sabbioso', 11, 300, NULL),
+  (500, 'limoso', 12, 300, NULL),
+  (500, 'fertile', 13, 300, NULL),
+  (500, 'argilloso', 14, 300, NULL),
+  (500, 'sabbioso', 15, 300, NULL),
+  (500, 'limoso', 16, 300, NULL),
+  (500, 'fertile', 17, 300, NULL),
+  (500, 'argilloso', 18, 300, NULL),
+  (500, 'sabbioso', 19, 300, NULL),
+  (500, 'limoso', 20, 300, NULL),
+  (500, 'fertile', 21, 300, NULL),
+  (500, 'argilloso', 22, 300, NULL),
+  (500, 'sabbioso', 23, 300, NULL);
 
 -- Popolamento Progetto_Coltivazione 
 INSERT INTO Progetto_Coltivazione (titolo, descrizione, stima_raccolto, data_inizio, data_fine, ID_Lotto)
