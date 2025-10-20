@@ -76,6 +76,7 @@ CREATE TABLE Attivita (
   Codice_FiscaleCol VARCHAR(16),
   ID_Lotto         INT NOT NULL,
   stato            VARCHAR(50) NOT NULL DEFAULT 'pianificata',
+  ID_Progetto      INT REFERENCES Progetto_Coltivazione(ID_Progetto),
   CONSTRAINT check_stato 
   	CHECK (
   	  stato IN (
