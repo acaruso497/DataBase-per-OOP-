@@ -25,12 +25,15 @@ CREATE TABLE Coltivatore (
       'professionista'
     )),
 	psw      VARCHAR(100) NOT NULL,
+	username_proprietario VARCHAR(50) NOT NULL,
   CONSTRAINT chk_valori_distinti_coltivatore
     CHECK (
       nome    <> cognome
       AND nome    <> username
       AND cognome <> username
     )
+	CONSTRAINT fk_colt_propr
+    FOREIGN KEY (username_proprietario) REFERENCES proprietario(username);
 );
 
 CREATE TABLE Lotto (
