@@ -459,25 +459,12 @@ CREATE TRIGGER trg_after_attivita_insert
 
 ---------------------POPOLAMENTO TABELLE BASE------------------------------
 
--- Popolamento Proprietario
-INSERT INTO Proprietario (Codice_Fiscale, nome, cognome, username, psw) 
-VALUES 
-  ('SGNMRA88A41F205X', 'Mara',    'Sangiovanni', 'marsan','MaraSNG'),
-  ('DMNSRG85T12C351Y', 'Sergio',  'Di Martino',  'serdim','SergioDM');
-
--- Popolamento Coltivatore (esperienza = default 'principiante')
-INSERT INTO Coltivatore (Codice_Fiscale, nome, cognome, username, psw ) 
-VALUES
-  ('GRCNCL92P10F839Z', 'Nicolo',   'Agricola', 'nicagr','Nico'),
-  ('FRLRMN90A01L736X', 'Armando',  'Fiorillo', 'arfior','Arma'),
-  ('CRSNTN99C20L378W', 'Antonio',  'Caruso',   'antcar','Anto' );
-
 -- Popolamento Lotto
 INSERT INTO Lotto (metri_quadri, tipo_terreno, posizione, costo_terreno, Codice_FiscalePr) 
 VALUES
-  (500, 'argilloso', 1, 300, 'SGNMRA88A41F205X'),
-  (500, 'sabbioso', 2, 300, 'DMNSRG85T12C351Y'),
-  (500, 'sabbioso', 3, 300, 'DMNSRG85T12C351Y'),
+  (500, 'argilloso', 1, 300,  NULL),
+  (500, 'sabbioso', 2, 300,  NULL),
+  (500, 'sabbioso', 3, 300, NULL),
   (500, 'argilloso', 4, 300, NULL),
   (500, 'sabbioso', 5, 300, NULL),
   (500, 'limoso', 6, 300, NULL),
@@ -499,59 +486,6 @@ VALUES
   (500, 'argilloso', 22, 300, NULL),
   (500, 'sabbioso', 23, 300, NULL);
 
--- Popolamento Progetto_Coltivazione 
-INSERT INTO Progetto_Coltivazione (titolo, descrizione, stima_raccolto, data_inizio, data_fine, ID_Lotto)
-VALUES 
-  ('Coltivazione zucchine', 'Progetto dedicato alla coltivazione delle zucchine chiare', 1200, '2025-04-01', '2025-07-01', 1),
-  ('Coltivazione pomodoro', 'Progetto dedicato alla coltivazione dei pomodori San Marzano', 800, '2025-05-01', '2025-08-01', 2),
-  ('Coltivazione pomodoro datterino', 'Progetto dedicato alla coltivazione dei pomodori datterini gialli', 800, '2025-05-15', '2025-09-01', 3);
-
--- Popolamento Coltura
-INSERT INTO Coltura (varietà)
-VALUES
-  ('Zucchina Chiara'),
-  ('Pomodoro San Marzano'),
-  ('Pomodoro Datterino Giallo');
-
--- Popolamento Attività
-INSERT INTO Attivita (Codice_FiscaleCol, ID_Lotto, stato) 
-VALUES
-  ('GRCNCL92P10F839Z', 1, 'pianificata'),
-  ('FRLRMN90A01L736X', 2, 'pianificata'),
-  ('CRSNTN99C20L378W', 1, 'pianificata'),
-  ('GRCNCL92P10F839Z', 3, 'pianificata');
-  
--- Popolamento Semina
-INSERT INTO Semina (giorno_inizio, giorno_fine, profondita, tipo_semina, ID_Attivita) 
-VALUES
-('2025-04-05', '2025-04-10', 10, 'Diretta', 1),        
-('2025-05-05', '2025-05-10', 10, 'In semenzaio', 2),     
-('2025-04-15', '2025-04-20', 10, 'A spaglio', 3),      
-('2025-05-20', '2025-05-25', 10, 'A spaglio', 4);   
-
--- Popolamento Irrigazione
-INSERT INTO Irrigazione (giorno_inizio, giorno_fine, tipo_irrigazione, ID_Attivita) 
-VALUES
- ('2025-04-15', '2025-04-25', 'a goccia', 1),           
- ('2025-05-20', '2025-05-30', 'a pioggia', 2),          
- ('2025-04-25', '2025-05-05', 'per scorrimento', 3),   
- ('2025-05-30', '2025-06-05', 'per scorrimento', 4);   
-  
-  
--- Popolamento Raccolta
-INSERT INTO Raccolta (giorno_inizio, giorno_fine, raccolto_effettivo, ID_Attivita) 
-VALUES
-  ('2025-06-10', '2025-06-20', 250.50, 1),             
-  ('2025-07-05', '2025-07-15', 180.75, 2),              
-  ('2025-06-25', '2025-07-05', 200.15, 3),             
-  ('2025-08-20', '2025-08-30', 280.15, 4);  
-  
--- Popolamento Notifica
-INSERT INTO Notifica
-(Attivita_programmate, Data_evento, Utenti_tag, Tutti_colt, Titolo, Descrizione, Lettura, ID_Attivita)
-VALUES
-  ('Controllare piante', CURRENT_DATE, 'nicagr,arfior', FALSE, 'Verifica piante',  'Controllare lo stato delle piante', FALSE, 1),
-  ('Controllare terreno', CURRENT_DATE, 'antcar',         FALSE, 'Verifica terreno','Controllare lo stato del terreno', FALSE, 2);
 
 
 ---------------------POPOLAMENTO TABELLE BASE------------------------------
@@ -576,21 +510,6 @@ CREATE TABLE Progetto_Coltura (
 
 ----------------------TABELLE PONTE-----------------------------------
 
----------------------POPOLAMENTO TABELLE PONTE------------------------------
-
--- Associazione Notifica → Proprietario
-INSERT INTO Invia (ID_Notifica, Codice_FiscalePr)
-VALUES
-  (1, 'SGNMRA88A41F205X'),
-  (2, 'DMNSRG85T12C351Y');
-
--- Associazione Progetto → Coltura
-INSERT INTO Progetto_Coltura (ID_Coltura, ID_Progetto)
-VALUES
-  (1, 1),
-  (2, 2),
-  (3, 3);
----------------------POPOLAMENTO TABELLE PONTE------------------------------
 ---------------------VIEW---------------------------------------------------
 --_______________________view raccolto______________________________
 CREATE OR REPLACE VIEW view_raccolto AS
