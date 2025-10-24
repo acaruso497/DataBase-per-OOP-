@@ -31,9 +31,9 @@ CREATE TABLE Coltivatore (
       nome    <> cognome
       AND nome    <> username
       AND cognome <> username
-    )
+    ),
 	CONSTRAINT fk_colt_propr
-    FOREIGN KEY (username_proprietario) REFERENCES proprietario(username);
+    FOREIGN KEY (username_proprietario) REFERENCES proprietario(username)
 );
 
 CREATE TABLE Lotto (
@@ -818,4 +818,6 @@ LEFT JOIN Progetto_Coltura AS pcol ON col.id_coltura=pcol.id_coltura
 LEFT JOIN Progetto_Coltivazione AS pc ON pc.id_progetto=pcol.id_progetto
 LEFT JOIN Lotto AS l ON l.ID_Lotto=pc.ID_Lotto;  
 --_______________________view ProprietarioRaccoltoColture______________________________
+
+
 
