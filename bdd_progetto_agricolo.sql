@@ -818,6 +818,22 @@ LEFT JOIN Progetto_Coltura AS pcol ON col.id_coltura=pcol.id_coltura
 LEFT JOIN Progetto_Coltivazione AS pc ON pc.id_progetto=pcol.id_progetto
 LEFT JOIN Lotto AS l ON l.ID_Lotto=pc.ID_Lotto;  
 --_______________________view ProprietarioRaccoltoColture______________________________
+--_______________________view ProprietarioProgetti______________________________________
+CREATE OR REPLACE VIEW ProprietarioProgetti AS
+SELECT 
+    p.Codice_Fiscale,
+    p.nome,
+    p.cognome,
+    p.username,
+    pc.ID_Progetto,
+    pc.titolo AS titolo_progetto
+FROM Proprietario p
+LEFT JOIN Lotto l 
+    ON l.Codice_FiscalePr = p.Codice_Fiscale
+LEFT JOIN Progetto_Coltivazione pc 
+    ON pc.ID_Lotto = l.ID_Lotto
+ORDER BY 
+    pc.ID_Progetto;
 
-
+--_______________________view ProprietarioProgetti______________________________________
 
