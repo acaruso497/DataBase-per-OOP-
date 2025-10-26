@@ -68,7 +68,12 @@ FOREIGN KEY (ID_Lotto) REFERENCES Lotto(ID_Lotto)
 CREATE TABLE Coltura (
   ID_Coltura            INT PRIMARY KEY,
   varietà               VARCHAR(50),
-  raccoltoProdotto    	INT DEFAULT 0
+  raccoltoProdotto    	INT DEFAULT 0,
+  MAX                   INT DEFAULT 0,
+  MIN                   INT DEFAULT 0,
+  AVG                   INT DEFAULT 0,
+  COUNTER               INT DEFAULT 0
+	 
 );
 
 
