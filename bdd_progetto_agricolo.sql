@@ -80,7 +80,6 @@ CREATE TABLE Coltura (
 CREATE TABLE Attivita (
   ID_Attivita     INT     PRIMARY KEY,
  giorno_assegnazione   DATE NOT NULL DEFAULT CURRENT_DATE,
- CHECK (giorno_assegnazione = CURRENT_DATE),
   Codice_FiscaleCol VARCHAR(16),
   ID_Lotto         INT NOT NULL,
   stato            VARCHAR(50) NOT NULL DEFAULT 'pianificata',
